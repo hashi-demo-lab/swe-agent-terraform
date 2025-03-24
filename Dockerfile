@@ -2,25 +2,26 @@ FROM --platform=linux/amd64 composio/swe:py3.11
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERRAFORM_VERSION=1.11.2
-ENV VAULT_VERSION=1.19.0
+ENV TERRAFORM_LS_VERSION=0.36.4
 
-RUN sudo apt-get update \
-&& sudo apt-get install -y unzip \
-&& sudo apt-get install -y make \
-&& sudo apt-get install -y jq \
-&& sudo apt-get install -y wget \
-&& sudo apt-get install -y git \
-&& sudo apt-get install -y sudo \
-&& sudo apt-get install -y coreutils
-
-# # Install Vault
-# RUN sudo wget --quiet "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip" \
-#     && sudo unzip vault_${VAULT_VERSION}_linux_amd64.zip \
-#     && sudo mv vault /usr/local/bin \
-#     && sudo rm vault_${VAULT_VERSION}_linux_amd64.zip
+RUN apt-get update && apt-get install -y \
+    unzip \
+    make \
+    jq \
+    wget \
+    git \
+    coreutils \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Terraform
-RUN sudo wget --quiet "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" \
-    && sudo unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
-    && sudo mv terraform /usr/local/bin \
-    && sudo rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+RUN wget --quiet "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" \
+    && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && mv terraform /usr/local/bin \
+    && rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+
+# Install terraform-ls (Language Server)
+RUN wget --quiet "https://github.com/hashicorp/terraform-ls/releases/download/v${TERRAFORM_LS_VERSION}/terraform-ls_${TERRAFORM_LS_VERSION}_linux_amd64.zip" \
+    && unzip terraform-ls_${TERRAFORM_LS_VERSION}_linux_amd64.zip \
+    && mv terraform-ls /usr/local/bin/ \
+    && rm terraform-ls_${TERRAFORM_LS_VERSION}_linux_amd64.zip \
+    && chmod +x /usr/local/bin/terraform-ls
