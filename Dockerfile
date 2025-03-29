@@ -20,8 +20,8 @@ RUN wget --quiet "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/
     && rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
 # Install terraform-ls (Language Server)
-RUN wget --quiet "https://github.com/hashicorp/terraform-ls/releases/download/v${TERRAFORM_LS_VERSION}/terraform-ls_${TERRAFORM_LS_VERSION}_linux_amd64.zip" \
-    && unzip terraform-ls_${TERRAFORM_LS_VERSION}_linux_amd64.zip \
+RUN wget --quiet "https://releases.hashicorp.com/terraform-ls/${TERRAFORM_LS_VERSION}/terraform-ls_${TERRAFORM_LS_VERSION}_linux_amd64.zip" \
+    && unzip -o terraform-ls_${TERRAFORM_LS_VERSION}_linux_amd64.zip \
     && mv terraform-ls /usr/local/bin/ \
     && rm terraform-ls_${TERRAFORM_LS_VERSION}_linux_amd64.zip \
     && chmod +x /usr/local/bin/terraform-ls
